@@ -76,23 +76,25 @@ resource "azurerm_network_interface_security_group_association" "web_server_nsg_
   network_interface_id      = azurerm_network_interface.web_server_nic.id
 }
 
-resource "azurerm_windows_virtual_machine" "web_server" {
+resource "azurerm_linux_virtual_machine" "web_server" {
   name                  = var.web_server_name
   resource_group_name   = azurerm_resource_group.webserver_server_rg.name
   location              = var.web_server_location
   network_interface_ids = [azurerm_network_interface.web_server_nic.id]
   size                  = "Standard_B1s"
   admin_username        = "webserver"
-  admin_password        = "password1234#secure"
+  admin_ssh_key {
+    username   = "adminuser"
+    public_key = file("~/.ssh/id_ed25519.pub")
+  }
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
   source_image_reference {
-    publisher = "MicrosoftWindowsServer"
-    offer     = "WindowsServerSemiAnnual"
-    sku       = "Datacenter-Core-1709-smalldisk"
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "18.04-LTS"
     version   = "latest"
   }
-
 }

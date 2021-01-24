@@ -29,7 +29,7 @@ resource "azurerm_subnet" "web_server_subnet" {
   name                 = "${var.resource_prefix}-subnet"
   resource_group_name  = azurerm_resource_group.webserver_server_rg.name
   virtual_network_name = azurerm_virtual_network.web_server_vnet.name
-  address_prefix       = var.web_server_address_prefix
+  address_prefixes     = [var.web_server_address_prefix]
 }
 
 resource "azurerm_network_interface" "web_server_nic" {
@@ -40,6 +40,7 @@ resource "azurerm_network_interface" "web_server_nic" {
     name                          = "${var.web_server_name}-ip"
     subnet_id                     = azurerm_subnet.web_server_subnet.id
     private_ip_address_allocation = "dynamic"
+    public_ip_address_id          = azurerm_public_ip.web_server_public_ip.id
   }
 }
 
@@ -73,4 +74,25 @@ resource "azurerm_network_security_rule" "web_server_nsg_rule_rdp" {
 resource "azurerm_network_interface_security_group_association" "web_server_nsg_association" {
   network_security_group_id = azurerm_network_security_group.web_server_nsg.id
   network_interface_id      = azurerm_network_interface.web_server_nic.id
+}
+
+resource "azurerm_windows_virtual_machine" "web_server" {
+  name                  = var.web_server_name
+  resource_group_name   = azurerm_resource_group.webserver_server_rg.name
+  location              = var.web_server_location
+  network_interface_ids = [azurerm_network_interface.web_server_nic.id]
+  size                  = "Standard_B1s"
+  admin_username        = "webserver"
+  admin_password        = "password1234#secure"
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+  source_image_reference {
+    publisher = "MicrosoftWindowsServer"
+    offer     = "WindowsServerSemiAnnual"
+    sku       = "Datacenter-Core-1709-smalldisk"
+    version   = "latest"
+  }
+
 }

@@ -5,4 +5,4 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs
 npm install npm@latest -g
 npx create-react-app dummy
 cd dummy
-npm start
+npm start &

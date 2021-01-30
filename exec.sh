@@ -1,7 +1,6 @@
 #!/bin/bash
-DEBIAN_FRONTEND=noninteractive apt-get install nodejs -y
+DEBIAN_FRONTEND=noninteractive apt-get install nodejs npm -y
 npm install npm@latest -g
-npm install -g create-react-app
-create-react-app dummy
+npx create-react-app dummy
 cd dummy
 npm start

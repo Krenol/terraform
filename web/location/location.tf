@@ -42,8 +42,8 @@ resource "azurerm_network_security_group" "web_server_nsg" {
   location            = var.web_server_location
 }
 
-resource "azurerm_network_security_rule" "web_server_nsg_rule_http" {
-  name                        = "${var.resource_prefix}-nsg-rule-http"
+resource "azurerm_network_security_rule" "web_server_nsg_rule_react" {
+  name                        = "${var.resource_prefix}-nsg-rule-react"
   priority                    = 110
   direction                   = "Inbound"
   access                      = "Allow"

@@ -42,34 +42,6 @@ resource "azurerm_network_security_group" "web_server_nsg" {
   location            = var.web_server_location
 }
 
-resource "azurerm_network_security_rule" "web_server_nsg_rule_ssh" {
-  name                        = "${var.resource_prefix}-nsg-rule-ssh"
-  priority                    = 100
-  direction                   = "Inbound"
-  access                      = "Allow"
-  protocol                    = "TCP"
-  source_port_range           = "*"
-  destination_port_range      = "22"
-  source_address_prefix       = "*"
-  destination_address_prefix  = "*"
-  resource_group_name         = azurerm_resource_group.webserver_server_rg.name
-  network_security_group_name = azurerm_network_security_group.web_server_nsg.name
-}
-
-resource "azurerm_network_security_rule" "web_server_nsg_rule_http" {
-  name                        = "${var.resource_prefix}-nsg-rule-http"
-  priority                    = 110
-  direction                   = "Inbound"
-  access                      = "Allow"
-  protocol                    = "TCP"
-  source_port_range           = "*"
-  destination_port_range      = "3000"
-  source_address_prefix       = "*"
-  destination_address_prefix  = "*"
-  resource_group_name         = azurerm_resource_group.webserver_server_rg.name
-  network_security_group_name = azurerm_network_security_group.web_server_nsg.name
-}
-
 resource "azurerm_subnet_network_security_group_association" "web_server_sag" {
   network_security_group_id = azurerm_network_security_group.web_server_nsg.id
   subnet_id                 = azurerm_subnet.web_server_subnet["web-server"].id

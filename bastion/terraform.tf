@@ -3,6 +3,6 @@ terraform {
     resource_group_name  = "remote-state"
     storage_account_name = "udemytflearning"
     container_name       = "tfstate"
-    key                  = "main.tfstate"
+    key                  = "bastion.tfstate"
   }
 }
